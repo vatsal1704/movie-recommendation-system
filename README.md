@@ -31,12 +31,21 @@ The dataset used in this project was sourced from **CACL (Center for Applied Com
   - High-quality movie **posters**
   - Additional metadata like popularity and vote count
 
-> 📁 **Dataset Link**: **[Click here]([https://your-dataset-link.com](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata))** to access the dataset.
-
+> 📁 **[Click here](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)** to access the dataset. *(Insert actual link)*
 
 ## 🌐 Live Demo
 
-Check out the live project here: [https://movie-recommendatiion-system.streamlit.app/]
+You can try out the live version of the project online:
+
+👉 **[Click here](https://movie-recommendatiion-system.streamlit.app/)** to visit the Movie Recommendation System.
 
 ---
 
+## 🛠️ How to Use
+
+### 🔧 Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-username/movie-recommendation-system.git
+   cd movie-recommendation-system
