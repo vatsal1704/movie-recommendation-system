@@ -201,7 +201,8 @@ import streamlit as st
 import pandas as pd
 import requests
 import pickle
-import io
+import gdown
+import os
 from streamlit_option_menu import option_menu
 
 # Set page config
@@ -211,15 +212,19 @@ st.set_page_config(
     layout="wide"
 )
 
-# Load data from Google Drive
+# Load data using gdown (Google Drive)
 @st.cache_data
 def load_data():
-    gdrive_file_id = "1WrdhTYpmcHa2m4zjDbdp0GKCM0m_hMmD"
-    url = f"https://drive.google.com/uc?export=download&id={gdrive_file_id}"
+    file_id = "1WrdhTYpmcHa2m4zjDbdp0GKCM0m_hMmD"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    output_path = "/tmp/movie_data.pkl"
 
-    response = requests.get(url)
-    response.raise_for_status()
-    movies, similarity = pickle.load(io.BytesIO(response.content))
+    if not os.path.exists(output_path):  # Avoid re-downloading on every run
+        gdown.download(url, output_path, quiet=False)
+
+    with open(output_path, "rb") as f:
+        movies, similarity = pickle.load(f)
+
     return movies, similarity
 
 movies, similarity = load_data()
@@ -240,7 +245,7 @@ def recommend(movie_title):
 # Fetch movie poster
 def fetch_poster(movie_id):
     try:
-        api_key = st.secrets.get("TMDB_API_KEY", "7b995d3c6fd91a2284b4ad8cb390c7b8")  # Fallback to default key
+        api_key = st.secrets.get("TMDB_API_KEY", "7b995d3c6fd91a2284b4ad8cb390c7b8")
         url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}'
         response = requests.get(url)
         response.raise_for_status()
@@ -267,7 +272,7 @@ with st.sidebar:
 if selected == "Recommend Movies":
     st.title("🎬 Movie Recommendation System")
     st.markdown("Discover movies similar to your favorites!")
-    
+
     col1, col2 = st.columns([3, 1])
     with col1:
         selected_movie = st.selectbox(
@@ -276,18 +281,17 @@ if selected == "Recommend Movies":
             index=0,
             help="Start typing to search for a movie"
         )
-    
+
     if st.button('Get Recommendations', use_container_width=True):
         with st.spinner('Finding similar movies...'):
             recommended_titles, recommended_ids = recommend(selected_movie)
-            
+
             if recommended_titles.any():
                 st.success(f"Movies similar to '{selected_movie}':")
-                
-                # Display in 2 rows of 5 columns each
+
                 for i in range(0, 10, 5):
                     cols = st.columns(5)
-                    for col, j in zip(cols, range(i, i+5)):
+                    for col, j in zip(cols, range(i, i + 5)):
                         if j < len(recommended_titles):
                             with col:
                                 st.image(
@@ -301,20 +305,19 @@ elif selected == "About":
     st.markdown("""
     ### Movie Recommendation System
     This system recommends movies based on content similarity using:
-    - **Content-Based Filtering**: Analyzes movie features to find similar items
-    - **TMDB API**: Fetches movie posters and additional details
+    - **Content-Based Filtering**
+    - **TMDB API** for movie posters
     
-    **How it works:**
-    1. Select a movie you like
+    **Steps:**
+    1. Choose a movie
     2. Click "Get Recommendations"
-    3. Discover similar movies
-    
-    **Dataset:** Contains information about 5000+ movies
+    3. Enjoy suggestions!
     """)
-    
+
     st.markdown("---")
     st.caption("Built with ❤️ using Python, Streamlit, and TMDB API")
 
 # Footer
 st.markdown("---")
-st.caption("Note: Movie data and posters are sourced from TMDB. This is for educational purposes only.")
+st.caption("Note: Movie data and posters are sourced from TMDB. For educational use only.")
+
