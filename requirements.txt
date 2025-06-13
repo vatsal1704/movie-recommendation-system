@@ -1,7 +1,5 @@
+streamlit
 pandas
 requests
-streamlit
-numpy
-pickle
 scikit-learn
-python
+streamlit-option-menu
