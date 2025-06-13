@@ -31,7 +31,7 @@ The dataset used in this project was sourced from **CACL (Center for Applied Com
   - High-quality movie **posters**
   - Additional metadata like popularity and vote count
 
-> 📁 **Dataset Link**: [https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata]
+> 📁 **Dataset Link**: **[Click here]([https://your-dataset-link.com](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata))** to access the dataset.
 
 
 ## 🌐 Live Demo
